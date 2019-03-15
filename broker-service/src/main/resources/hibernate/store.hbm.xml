@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="live.betterman.core.entity.Store" table="b_store" lazy="true">
+        <cache usage="read-write"/>
+        <id name="id" column="id" type="java.lang.String">
+            <!--<generator class="assigned"></generator>-->
+        </id>
+        <property name="storeName" column="stroeName" type="java.lang.String"/>
+        <property name="licensePicPath" column="licensePicPath" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>

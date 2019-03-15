@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="live.betterman.core.entity.Broker" table="b_broker" lazy="true">
+        <cache usage="read-write"/>
+        <id name="brokerId" column="brokerid" type="java.lang.String">
+            <generator class="assigned"></generator>
+        </id>
+        <property name="brokerNo" column="brokerno" type="java.lang.String"/>
+        <property name="brokerPhone" column="phone" type="java.lang.String"/>
+        <property name="avatar" column="photo" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>

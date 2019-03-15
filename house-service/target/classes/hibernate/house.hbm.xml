@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="live.betterman.core.entity.House" table="b_HouseSource" lazy="true">
+   		<cache usage="read-write"/>
+	    <id name="id" column="intHouseId" type="java.lang.String">
+            <generator class="assigned"></generator>
+        </id>
+		<property name="houseCode" column="intHouseNo" type="java.lang.String"/>
+        <property name="brokerId" column="brokerId" type="java.lang.String"/>
+        <property name="roomNumberId" column="ROOM_NUM_ID" type="java.lang.String"/>
+
+
+    </class>
+</hibernate-mapping>
