@@ -1,6 +1,7 @@
 package live.betterman.core.service;
 
 import live.betterman.core.entity.House;
+import live.betterman.core.search.HouseSearchModel;
 
 /**
  * @author: zhudawei
@@ -16,4 +17,5 @@ public interface HouseService {
     void sync(House house);
     void sync(String houseCode);
     boolean resetIndex();
+    HouseSearchModel get(String houseCode);
 }

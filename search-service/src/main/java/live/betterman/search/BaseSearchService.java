@@ -7,15 +7,20 @@ import live.betterman.core.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +45,10 @@ public abstract class BaseSearchService<T extends SearchModel> implements Search
      */
     protected abstract String getIndexName();
 
+    private Class<T> getTClass() {
+        return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
     @Override
     public boolean index(T model) throws IOException{
         String indexName = getIndexName();
@@ -58,6 +67,11 @@ public abstract class BaseSearchService<T extends SearchModel> implements Search
         System.out.println(response.status().getStatus());
 
         return response.status().getStatus() - 200 < 99;
+    }
+
+    @Override
+    public CompletableFuture<Boolean> asyncBulkIndex(List<T> models, String indexName){
+        return CompletableFuture.supplyAsync(()->bulkIndex(models, indexName));
     }
 
     @Override
@@ -160,4 +174,31 @@ public abstract class BaseSearchService<T extends SearchModel> implements Search
 
         return bulkIndex(models, indexName);
     }
+
+    @Override
+    public T get(String id) throws IOException {
+        GetRequest request = new GetRequest(getIndexName(), documentType, id);
+
+//        FetchSourceContext context = new FetchSourceContext(false, includes, excludes);
+////        request.fetchSourceContext(context);
+        GetResponse response = client.get(request);
+        String json = response.getSourceAsString();
+        return JSON.parseObject(json, this.getTClass());
+
+        //return get(id, null);
+    }
+//    @Override
+//    public T get(String id, String[] includes) throws IOException {
+//        return get(id, includes, null);
+//    }
+//    @Override
+//    public T get(String id, String[] includes, String[] excludes) throws IOException {
+//        GetRequest request = new GetRequest(getIndexName(), documentType, id);
+//
+//        FetchSourceContext context = new FetchSourceContext(false, includes, excludes);
+//        request.fetchSourceContext(context);
+//        GetResponse response = client.get(request);
+//        String json = response.getSourceAsString();
+//
+//    }
 }

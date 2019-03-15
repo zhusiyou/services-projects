@@ -2,12 +2,16 @@ package live.betterman.house.service.impl;
 
 import live.betterman.core.entity.House;
 import live.betterman.core.exception.SyncDataException;
+import live.betterman.core.search.HouseSearchModel;
+import live.betterman.core.service.HouseSearchService;
 import live.betterman.core.service.HouseService;
 import live.betterman.house.dao.HouseDao;
 import live.betterman.house.service.HouseSyncDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 /**
  * @author: zhudawei
@@ -23,6 +27,9 @@ public class HouseServiceImpl implements HouseService{
 
     @Autowired
     private HouseDao houseDao;
+
+    @Autowired
+    private HouseSearchService houseSearchService;
 
     @Override
     public House getByCode(String houseCode) {
@@ -51,6 +58,16 @@ public class HouseServiceImpl implements HouseService{
     @Override
     public boolean resetIndex() {
         return houseSyncDataService.resetIndex();
+    }
+
+    @Override
+    public HouseSearchModel get(String houseCode) {
+        try {
+            return houseSearchService.get(houseCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

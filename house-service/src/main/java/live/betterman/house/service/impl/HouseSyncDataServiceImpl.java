@@ -1,6 +1,5 @@
 package live.betterman.house.service.impl;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import live.betterman.core.entity.House;
 import live.betterman.core.event.house.BrokerChangedEvent;
 import live.betterman.core.event.house.ShowStatusChangedEvent;
@@ -14,7 +13,6 @@ import live.betterman.house.dao.HouseDao;
 import live.betterman.house.dao.HouseSourceDao;
 import live.betterman.house.service.HouseSyncDataService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
@@ -24,8 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -104,79 +100,14 @@ public class HouseSyncDataServiceImpl implements HouseSyncDataService {
         System.out.println(stopWatch.prettyPrint());
         return result;
 
-//        int maxBulkCount = 2000;
-
-//        List<Boolean> result = new ArrayList<>();
-//        int count = 0;
-//
-//        while (true){
-//            List<HouseSearchModel> list = models.stream().skip(count * maxBulkCount).limit(maxBulkCount).collect(Collectors.toList());
-//            System.out.println("count: " + count);
-//
-//            if(list.size()==0){
-//                break;
-//            }
-//
-//            boolean r = houseSearchService.bulkIndex(list);
-//            result.add(r);
-//        if(list.size()<maxBulkCount){
-//            break;
-//        }
-//
-//            count++;
-//        }
-//
-//        stopWatch.stop();
-//        System.out.println(stopWatch.prettyPrint());
-
-
-//        List<Boolean> result = new ArrayList<>();
-//
-//        //使用 guava 开源框架的 ThreadFactoryBuilder 给线程池的线程设置名字
-//        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("bulk-index-thread-%d").build();
-//
-//        ExecutorService pool = new ThreadPoolExecutor(5, 5, 0L,
-//                TimeUnit.MILLISECONDS,
-//                new LinkedBlockingDeque<Runnable>(200),
-//                namedThreadFactory,
-//                new ThreadPoolExecutor.AbortPolicy());
-//
-//        int count = 0;
-//
-//        while (true){
-//            List<HouseSearchModel> list = models.stream().skip(count * maxBulkCount).limit(maxBulkCount).collect(Collectors.toList());
-//            System.out.println("count: " + count + new Random());
-//
-//            if(list.size()==0){
-//                break;
-//            }
-//            pool.submit(()->{
-//                System.out.println(Thread.currentThread().getName() + "-------------" + list.size());
-//                boolean r = houseSearchService.bulkIndex(list);
-//                result.add(r);
-//
-//            });
-//
-//            if(list.size()<maxBulkCount){
-//                break;
-//            }
-//            count++;
-//        }
-//
-//        pool.shutdown();
-//
-//
-//        try{
-//            pool.awaitTermination(20, TimeUnit.SECONDS);
-//            stopWatch.stop();
-//            System.out.println(stopWatch.prettyPrint());
-//        }catch (InterruptedException e){
-//            e.printStackTrace();
-//        }
-
-
-
-
+//        CompletableFuture<Boolean> future = houseSearchService.asyncBulkIndex(models,"test-house");
+//        future.whenComplete((v, e)->{
+//           if(e==null){
+//               System.out.println("result from search service:" + v);
+//           } else{
+//               e.printStackTrace();
+//           }
+//        });
 
     }
 

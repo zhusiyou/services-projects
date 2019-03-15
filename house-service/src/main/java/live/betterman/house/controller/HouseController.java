@@ -1,6 +1,7 @@
 package live.betterman.house.controller;
 
 import live.betterman.core.entity.House;
+import live.betterman.core.search.HouseSearchModel;
 import live.betterman.core.service.HouseService;
 import live.betterman.house.service.HouseSyncDataService;
 import lombok.var;
@@ -26,6 +27,11 @@ public class HouseController {
     @GetMapping("/house/code/{houseCode}")
     public House get(@PathVariable String houseCode){
         return houseService.getByCode(houseCode);
+    }
+
+    @GetMapping("/house/model/code/{houseCode}")
+    public HouseSearchModel getSearchModel(@PathVariable String houseCode){
+        return houseService.get(houseCode);
     }
 
     @GetMapping("/houseSource/code/{houseCode}")
